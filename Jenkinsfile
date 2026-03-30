@@ -14,8 +14,7 @@ node {
     }
     
     stage('Docker Login'){
-        withCredentials([usernamePassword(crednetialsId: 'docker-hub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                sh 'echo $PASS | docker login -u $USER --password-stdin'
+        sh 'docker login -u vbankar12 -P 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'
             } 
     }
     stage('Docker push') {
