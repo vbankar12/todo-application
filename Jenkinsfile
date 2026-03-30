@@ -14,7 +14,7 @@ node {
     }
     
     stage('Docker Login'){
-        sh 'docker login -u vbankar12 -P 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'
+        sh 'docker login -u vbankar12 -P dummy'
             } 
     }
     stage('Docker push') {
