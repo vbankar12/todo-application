@@ -1,14 +1,9 @@
+node {
+    def IMAGE_NAME = "vbankar12/todo-application:lates"
 
-pipline{
-    agent any
-
-    envirnoment {
-        IMAGE_NAME = "vbankar12/todo-application:latest"
-    }
     stages('clone') {
         steps {
             git 'https://github.com/vbankar12/todo-application.git'
-    
         }
     }
     stage('Build'){
@@ -23,27 +18,26 @@ pipline{
     }
     stage('Docker Login'){
         steps{
-            withCredentials([usernamePassword(crednetialsId: 'docker-hub-credentials', usernameVariable:'USER', passwordVariable: 'PASS')]) {
+            withCredentials([usernamePassword(crednetialsId: 'docker-hub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                 sh 'echo $PASS | docker login -u $USER --password-stdin'
             }
 
          }
     }
-    
-stage('Docker push') {
+    stage('Docker push') {
     steps {
-        sh 'docker push vbankar12/todo-applicaion:latest'
+        sh "docker push vbankar12/todo-applicaion:latest"
+         }
     }
-}
-stage('Deploye with compose') {
+    stage('Deploye with compose') {
     steps {
         sh 'docker compose down || true'
         sh 'docker compose up -d'
+        }   
     }
-  } 
-stage('Cleanp') {
+    stage('Cleanp') {
     steps {
         sh 'rm -rf *'
-    }
-  }
+        }
+    } 
 }
