@@ -3,7 +3,7 @@ pipline{
     agent any
 
     envirnoment {
-        DOCKER_IMAGE = "vbankar12/todo-application:latest"
+        IMAGE_NAME = "vbankar12/todo-application:latest"
     }
     stages('clone') {
         steps {
@@ -11,36 +11,39 @@ pipline{
     
         }
     }
-    stage('Build Maven'){
+    stage('Build'){
         steps {
             sh 'mvn clean packge -DskipTests'
         }
     }
-    stages('Build Docker Image') {
+    stages('Docker Build') {
         steps {
             sh 'docker build -t todo-application-image .'
-            sh 'docker tag todo-application-image vbankar12/todo-applicaion:latest'
         }
     }
-    stage('Push Docker Image'){
+    stage('Docker Login'){
         steps{
             withCredentials([usernamePassword(crednetialsId: 'docker-hub-credentials', usernameVariable:'USER', passwordVariable: 'PASS')]) {
                 sh 'echo $PASS | docker login -u $USER --password-stdin'
-                sh 'docker push vbankar12/todo-applicaion:latest'
             }
 
          }
     }
     
-stage('Deploy') {
+stage('Docker push') {
     steps {
-        sh 'docker-compose down'
-        sh 'docker-compose up -d'
+        sh 'docker push vbankar12/todo-applicaion:latest'
     }
 }
-stage('Cleanup') {
+stage('Deploye with compose') {
+    steps {
+        sh 'docker compose down || true'
+        sh 'docker compose up -d'
+    }
+  } 
+stage('Cleanp') {
     steps {
         sh 'rm -rf *'
     }
-  } 
+  }
 }
