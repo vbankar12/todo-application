@@ -17,6 +17,7 @@ node {
     
     stage('Deploye with compose') {
         sh 'docker rm -f mysql-db || true'
+        sh 'docker rm -f todo-application || true'
         sh 'docker compose down || true'
         sh 'docker compose up -d'
     }   
