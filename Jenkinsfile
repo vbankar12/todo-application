@@ -23,6 +23,6 @@ node {
     }   
     
     stage('Cleanp') {
-     sh 'rm -rf *'
+    cleanWS()
     }
 }     
