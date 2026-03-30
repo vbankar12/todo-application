@@ -12,15 +12,11 @@ node {
     stage('Docker Build') {
          sh 'docker build -t todo-application-image .'
     }
-    
+
     stage('Docker Login'){
         sh 'docker login -u vbankar12 -P dummy'
-            } 
-    }
-    stage('Docker push') {
-        sh "docker push vbankar12/todo-applicaion:latest"
-    }
-
+    } 
+    
     stage('Deploye with compose') {
         sh 'docker compose down || true'
         sh 'docker compose up -d'
@@ -29,5 +25,4 @@ node {
     stage('Cleanp') {
      sh 'rm -rf *'
     }
-     
-}
+}     
