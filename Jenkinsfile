@@ -1,5 +1,5 @@
 node {
-    def IMAGE_NAME = "vbankar12/todo-application:lates"
+    def IMAGE_NAME = "vbankar12/todo-application:latest"
 
     stage('clone') {
             git 'https://github.com/vbankar12/todo-application.git'
@@ -9,12 +9,10 @@ node {
          sh 'mvn clean package -DskipTests'
     }
 
-    stage('Docker Build') {
-         sh 'docker build -t todo-application-image .'
-    }
-
-    stage('Docker Login'){
-        sh 'docker login -u vbankar12 -P dummy'
+    stage('Docker push'){
+        sh "docker tag todo-application-image vbankar12/todo-application:latest"
+        sh "docker push vbankar12/todo-application:latest"
+    
     } 
     
     stage('Deploye with compose') {
